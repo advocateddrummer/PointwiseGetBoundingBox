@@ -56,11 +56,11 @@ if { [pw::Display selectEntities \
   exit
 }
 
-puts "Completed getBBox script..."
 puts ""
 puts "Bounding box is:"
 puts "($xMin, $yMin, $zMin) -> ($xMax, $yMax, $zMax)"
 puts ""
+puts "Completed getBBox script..."
 exit
 
 # vim: filetype=tcl
