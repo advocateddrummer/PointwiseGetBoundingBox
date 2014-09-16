@@ -5,7 +5,7 @@ puts "Beginning getBBox script..."
 set mask [pw::Display createSelectionMask \
   -requireConnector {} \
   -requireDomain {} \
-  -requireBlock {}];# \
+  -requireBlock {} \
   -requireDatabase {} \
   -requireDatabaseBoundary {}]
 
@@ -16,39 +16,13 @@ if { [pw::Display selectEntities \
 
   #puts "--Successfully selected entities..."
 
-  set xMin 1e100
-  set yMin 1e100
-  set zMin 1e100
-  set xMax -1e100
-  set yMax -1e100
-  set zMax -1e100
+  set bbox [pwu::Extents empty]
 
   foreach {n things} [array get selected] {
     #puts "--$n: $things [llength $things]"
-
-    for {set i 0} {$i < [llength $things]} {incr i} {
-      set thing [lindex $things $i]
-      #puts "----$thing"
-      #puts "----[$thing getName]"
-      set ent [pw::GridEntity getByName [$thing getName]]
-      set nPoints [$ent getPointCount]
-      #puts "----$ent"
-      #puts "----$nPoints"
-
-      for {set j 1} {$j <= $nPoints} {incr j} {
-        set xyz [$ent getXYZ -grid $j]
-        set x [pwu::Vector3 index $xyz 0]
-        set y [pwu::Vector3 index $xyz 1]
-        set z [pwu::Vector3 index $xyz 2]
-
-        set xMin [::tcl::mathfunc::min $xMin $x]
-        set yMin [::tcl::mathfunc::min $yMin $y]
-        set zMin [::tcl::mathfunc::min $zMin $z]
-        set xMax [::tcl::mathfunc::max $xMax $x]
-        set yMax [::tcl::mathfunc::max $yMax $y]
-        set zMax [::tcl::mathfunc::max $zMax $z]
-
-      }
+    
+    foreach thing $things {
+      set bbox [pwu::Extents enclose $bbox [$thing getExtents]]
     }
   }
 } else {
@@ -58,7 +32,7 @@ if { [pw::Display selectEntities \
 
 puts ""
 puts "Bounding box is:"
-puts "($xMin, $yMin, $zMin) -> ($xMax, $yMax, $zMax)"
+puts "[pwu::Extents minimum $bbox] -> [pwu::Extents maximum $bbox]"
 puts ""
 puts "Completed getBBox script..."
 exit
