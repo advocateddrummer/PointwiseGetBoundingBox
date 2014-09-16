@@ -31,7 +31,7 @@ set mask [pw::Display createSelectionMask \
 
   foreach {n things} [array get selected] {
     #puts "--$n: $things [llength $things]"
-    
+
     if { $n == "Boundaries" } {
       set curves [list]
       foreach thing $things {
