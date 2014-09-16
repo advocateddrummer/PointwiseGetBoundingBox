@@ -3,16 +3,27 @@ package require PWI_Glyph 2.17.1
 puts "Beginning getBBox script..."
 
 set mask [pw::Display createSelectionMask \
-  -requireConnector {} \
-  -requireDomain {} \
-  -requireBlock {} \
-  -requireDatabase {} \
-  -requireDatabaseBoundary {}]
+          -requireConnector {} \
+          -requireDomain {} \
+          -requireBlock {} \
+          -requireDatabase {} \
+          -requireDatabaseBoundary {}]
 
-if { [pw::Display selectEntities \
-       -selectionmask $mask \
-       -description "Select entities for bounding box" \
-     selected] } {
+  #
+  # Use selected entity(ies) or prompt user for selection if nothing is selected
+  # at run time.
+  #
+  if { !([pw::Display getSelectedEntities -selectionmask $mask selected]) } {
+
+    if { !([pw::Display selectEntities \
+            -selectionmask $mask \
+            -description "Select entities for bounding box" \
+            selected]) } {
+
+      puts "Error: Unsuccessfully selected entities... exiting"
+      exit
+    }
+  }
 
   #puts "--Successfully selected entities..."
 
@@ -27,10 +38,6 @@ if { [pw::Display selectEntities \
       set bbox [pwu::Extents enclose $bbox [$thing getExtents]]
     }
   }
-} else {
-  puts "Error: Unsuccessfully selected entities... exiting"
-  exit
-}
 
 puts ""
 puts "Bounding box is:"
