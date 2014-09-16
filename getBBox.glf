@@ -18,9 +18,11 @@ if { [pw::Display selectEntities \
 
   set bbox [pwu::Extents empty]
 
+  set startTime [pwu::Time now]
+
   foreach {n things} [array get selected] {
     #puts "--$n: $things [llength $things]"
-    
+
     foreach thing $things {
       set bbox [pwu::Extents enclose $bbox [$thing getExtents]]
     }
@@ -34,7 +36,9 @@ puts ""
 puts "Bounding box is:"
 puts "[pwu::Extents minimum $bbox] -> [pwu::Extents maximum $bbox]"
 puts ""
-puts "Completed getBBox script..."
+puts "Completed getBBox script."
+puts "Total elapsed time is [pwu::Time elapsed $startTime] seconds"
+
 exit
 
 # vim: filetype=tcl
