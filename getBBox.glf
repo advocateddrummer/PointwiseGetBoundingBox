@@ -6,6 +6,7 @@ set mask [pw::Display createSelectionMask \
           -requireConnector {} \
           -requireDomain {} \
           -requireBlock {} \
+          -requireSource {} \
           -requireDatabase {} \
           -requireDatabaseBoundary {}]
 
