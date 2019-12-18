@@ -49,6 +49,7 @@ set mask [pw::Display createSelectionMask \
 set bboxMin [pwu::Extents minimum $bbox]
 set bboxMax [pwu::Extents maximum $bbox]
 set bboxDeltas [pwu::Vector3 subtract $bboxMax $bboxMin]
+set bboxCentroid [pwu::Vector3 scale [pwu::Vector3 add $bboxMax $bboxMin] 0.5]
 
 puts ""
 puts "Bounding box is:"
@@ -56,6 +57,9 @@ puts "$bboxMin -> $bboxMax"
 puts ""
 puts "Bounding box deltas:"
 puts "$bboxDeltas"
+puts ""
+puts "Bounding box centroid:"
+puts "$bboxCentroid"
 puts ""
 puts "Completed getBBox script..."
 exit
